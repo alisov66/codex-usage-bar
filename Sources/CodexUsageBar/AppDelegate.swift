@@ -30,7 +30,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func updateStatus() {
         let indicator = model.indicator
-        statusItem.button?.image = renderer.image(for: indicator)
+        if let button = statusItem.button {
+            let availableHeight = button.bounds.height > 0 ? button.bounds.height : NSStatusBar.system.thickness
+            button.image = renderer.image(for: indicator, maximumHeight: availableHeight)
+        }
         statusItem.button?.toolTip = indicator.accessibilityLabel
         statusItem.button?.setAccessibilityLabel(indicator.accessibilityLabel)
     }

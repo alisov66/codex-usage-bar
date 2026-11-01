@@ -4,7 +4,7 @@ Source: https://www.figma.com/design/zCrkvUn8WyWUKH3YYn6QB0?node-id=9-1648
 
 - `usage-icon.svg` is the original design-context export of Usage Icon (`9:1609`), with its 18 × 18 viewport unchanged.
 - `usage-icon.pdf` is a PDF export of that same component via the Figma Plugin API, used by AppKit for native vector rendering. It preserves the badge's 25% alpha and the chart's solid alpha.
-- `menu-bar-tokens.json` mirrors the Typography and Colors collections, the `Menu bar/Label` text style, and the indicator's auto-layout geometry.
+- `menu-bar-tokens.json` mirrors the Typography and Colors collections and the `Menu bar/Label` text style. The icon canvas is increased to 24 points at the user's request; other spacing and typography remain as designed. The status button limits icon size to its available height so shorter menu bars do not clip it.
 
 The system-font family maps to the public AppKit system font when the separately installed SF Pro Text face is unavailable. The composed menu bar image is a template image: macOS supplies its contrast-appropriate foreground, and the exported alpha values retain the Figma two-tone treatment.
 

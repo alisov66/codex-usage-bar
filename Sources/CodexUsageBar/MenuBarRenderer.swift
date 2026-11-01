@@ -1,7 +1,7 @@
 import AppKit
 import UsageCore
 
-/// The values in this resource mirror the original Figma variables and text style.
+/// Typography and colors mirror Figma; layout includes the requested icon-size override.
 private struct MenuBarDesign: Decodable {
     struct Typography: Decodable {
         let family: String
@@ -60,9 +60,12 @@ final class MenuBarRenderer {
             ?? NSFont.systemFont(ofSize: typography.size, weight: .medium)
     }
 
-    func image(for indicator: MenuBarIndicator) -> NSImage {
+    func image(for indicator: MenuBarIndicator, maximumHeight: CGFloat? = nil) -> NSImage {
         let layout = design.layout
         let typography = design.typography
+        let iconScale = maximumHeight.map { min(1, max(typography.lineHeight, $0) / layout.iconHeight) } ?? 1
+        let iconWidth = layout.iconWidth * iconScale
+        let iconHeight = layout.iconHeight * iconScale
         let paragraph = NSMutableParagraphStyle()
         paragraph.minimumLineHeight = typography.lineHeight
         paragraph.maximumLineHeight = typography.lineHeight
@@ -71,7 +74,7 @@ final class MenuBarRenderer {
             .kern: typography.letterSpacing, .paragraphStyle: paragraph
         ]
         var fragments: [(text: NSAttributedString, x: CGFloat, width: CGFloat)] = []
-        var x = layout.iconWidth + layout.itemSpacing
+        var x = iconWidth + layout.itemSpacing
         func append(_ text: String) {
             let string = NSAttributedString(string: text, attributes: attributes)
             let width = ceil(string.size().width)
@@ -88,11 +91,11 @@ final class MenuBarRenderer {
             x += layout.quotaSpacing
             append(quota.value)
         }
-        let size = NSSize(width: x, height: max(layout.iconHeight, typography.lineHeight))
+        let size = NSSize(width: x, height: max(iconHeight, typography.lineHeight))
         let artwork = icon
         let result = NSImage(size: size, flipped: false) { _ in
-            artwork.draw(in: NSRect(x: 0, y: (size.height - layout.iconHeight) / 2,
-                                   width: layout.iconWidth, height: layout.iconHeight))
+            artwork.draw(in: NSRect(x: 0, y: (size.height - iconHeight) / 2,
+                                   width: iconWidth, height: iconHeight))
             for fragment in fragments {
                 fragment.text.draw(in: NSRect(x: fragment.x, y: (size.height - typography.lineHeight) / 2,
                                              width: fragment.width, height: typography.lineHeight))

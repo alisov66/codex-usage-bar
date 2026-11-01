@@ -5,7 +5,8 @@
     "indicator": "9:1642",
     "icon": "9:1609",
     "textStyle": "Menu bar/Label",
-    "textStyleId": "S:f03a2d0e6493b1bca02a5d98163838f2017e6283,"
+    "textStyleId": "S:f03a2d0e6493b1bca02a5d98163838f2017e6283,",
+    "layoutOverride": "User requested a 24-point icon canvas; original vector artwork remains 18 by 18."
   },
   "typography": {
     "font-family/system": "SF Pro Text",
@@ -25,8 +26,8 @@
     }
   },
   "layout": {
-    "icon-width": 18,
-    "icon-height": 18,
+    "icon-width": 24,
+    "icon-height": 24,
     "item-spacing": 4,
     "quota-spacing": 4,
     "separator": "·"

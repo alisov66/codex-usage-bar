@@ -9,7 +9,7 @@ A small native macOS app that keeps your remaining Codex quota in the menu bar.
 - Automatic refresh every minute, on opening the popover, and after waking your Mac.
 - Optional launch at login.
 - Choose both limits, five-hour only, or weekly only in Settings.
-- Original Figma icon and typography, with an 18-point icon and system-tinted two-tone artwork.
+- Original Figma artwork and typography, with a 24-point icon target that fits shorter menu bars and system-tinted two-tone artwork.
 - Native interface that follows your Mac's light or dark appearance.
 - Free and open source under the [MIT license](LICENSE).
 
