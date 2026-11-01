@@ -3,10 +3,11 @@
     "fileKey": "zCrkvUn8WyWUKH3YYn6QB0",
     "section": "9:1648",
     "indicator": "9:1642",
-    "icon": "9:1609",
+    "icon": "9:1807",
+    "iconVariant": "duo-tone=true, type=3 bars bold",
     "textStyle": "Menu bar/Label",
     "textStyleId": "S:f03a2d0e6493b1bca02a5d98163838f2017e6283,",
-    "layoutOverride": "User requested a 24-point icon canvas; original vector artwork remains 18 by 18."
+    "layoutNote": "Approved icon uses its original 24 by 24 canvas and fits shorter menu bars."
   },
   "typography": {
     "font-family/system": "SF Pro Text",

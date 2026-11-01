@@ -15,6 +15,9 @@ APP="dist/Codex Usage Bar.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN_DIR/CodexUsageBar" "$APP/Contents/MacOS/CodexUsageBar"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
+shasum -a 256 -c Resources/AppIcon/source.sha256
+cp Resources/AppIcon/Compiled/Assets.car "$APP/Contents/Resources/Assets.car"
+cp Resources/AppIcon/Compiled/CodexAppIcon.icns "$APP/Contents/Resources/CodexAppIcon.icns"
 for resource in "$BIN_DIR/"*.bundle; do
   if [ -d "$resource" ]; then cp -R "$resource" "$APP/Contents/Resources/"; fi
 done
