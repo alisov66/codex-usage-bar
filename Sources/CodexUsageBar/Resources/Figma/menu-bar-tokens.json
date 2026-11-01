@@ -1,0 +1,34 @@
+{
+  "source": {
+    "fileKey": "zCrkvUn8WyWUKH3YYn6QB0",
+    "section": "9:1648",
+    "indicator": "9:1642",
+    "icon": "9:1609",
+    "textStyle": "Menu bar/Label",
+    "textStyleId": "S:f03a2d0e6493b1bca02a5d98163838f2017e6283,"
+  },
+  "typography": {
+    "font-family/system": "SF Pro Text",
+    "menu-bar/label/font-weight": "Medium",
+    "menu-bar/label/font-size": 12,
+    "menu-bar/label/line-height": 14,
+    "letter-spacing": 0
+  },
+  "colors": {
+    "Dark": {
+      "menu-bar/foreground": {"r": 1, "g": 1, "b": 1, "a": 1},
+      "menu-bar/foreground-muted": {"r": 1, "g": 1, "b": 1, "a": 0.25}
+    },
+    "Light": {
+      "menu-bar/foreground": {"r": 0, "g": 0, "b": 0, "a": 1},
+      "menu-bar/foreground-muted": {"r": 0, "g": 0, "b": 0, "a": 0.25}
+    }
+  },
+  "layout": {
+    "icon-width": 18,
+    "icon-height": 18,
+    "item-spacing": 4,
+    "quota-spacing": 4,
+    "separator": "·"
+  }
+}

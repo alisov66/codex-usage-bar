@@ -59,7 +59,7 @@ struct UsageView: View {
                 }
                 .padding(16)
                 .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
-                Text("Menu bar shows the lowest remaining quota.")
+                Text("Menu bar: \(model.menuBarDisplay.title.lowercased()), quota remaining.")
                     .font(.caption2).foregroundStyle(.secondary)
             } else if model.isRefreshing {
                 HStack { Spacer(); ProgressView("Reading your usage…"); Spacer() }.padding(.vertical, 18)
@@ -129,6 +129,13 @@ struct UsageView: View {
 
     private var settings: some View {
         VStack(alignment: .leading, spacing: 12) {
+            Picker("Menu bar display", selection: Binding(get: { model.menuBarDisplay }, set: { model.setMenuBarDisplay($0) })) {
+                ForEach(MenuBarDisplay.allCases) { display in
+                    Text(display.title).tag(display)
+                }
+            }
+            .pickerStyle(.menu)
+            .controlSize(.small)
             Toggle("Launch at login", isOn: Binding(get: { model.launchAtLogin }, set: { model.setLaunchAtLogin($0) }))
                 .toggleStyle(.switch).controlSize(.small)
             VStack(alignment: .leading, spacing: 6) {

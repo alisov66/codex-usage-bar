@@ -75,4 +75,13 @@ public struct UsageSnapshot: Decodable, Sendable {
         """
         return try! JSONDecoder().decode(UsageSnapshot.self, from: Data(json.utf8))
     }
+
+    public static var menuBarPreview: UsageSnapshot {
+        let reset = Date().addingTimeInterval(7200).timeIntervalSince1970
+        let json = """
+        {"rateLimits":{"limitId":"codex","primary":{"usedPercent":32,"windowDurationMins":300,"resetsAt":\(reset)},
+        "secondary":{"usedPercent":8,"windowDurationMins":10080,"resetsAt":\(reset + 345600)}}}
+        """
+        return try! JSONDecoder().decode(UsageSnapshot.self, from: Data(json.utf8))
+    }
 }

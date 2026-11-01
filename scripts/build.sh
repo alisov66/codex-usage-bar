@@ -15,7 +15,10 @@ APP="dist/Codex Usage Bar.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN_DIR/CodexUsageBar" "$APP/Contents/MacOS/CodexUsageBar"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
+for resource in "$BIN_DIR/"*.bundle; do
+  if [ -d "$resource" ]; then cp -R "$resource" "$APP/Contents/Resources/"; fi
+done
 codesign --force --sign - "$APP"
 ditto -c -k --sequesterRsrc --keepParent "$APP" "dist/Codex-Usage-Bar-macOS.zip"
-shasum -a 256 "dist/Codex-Usage-Bar-macOS.zip" > dist/SHA256SUMS.txt
+(cd dist && shasum -a 256 Codex-Usage-Bar-macOS.zip > SHA256SUMS.txt)
 echo "Built $APP"

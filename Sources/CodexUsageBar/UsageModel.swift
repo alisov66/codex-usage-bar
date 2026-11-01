@@ -11,6 +11,7 @@ final class UsageModel: ObservableObject {
     @Published var lastUpdated: Date?
     @Published var now = Date()
     @Published var showSettings = false
+    @Published var menuBarDisplay = MenuBarDisplay(rawValue: UserDefaults.standard.string(forKey: "menuBarDisplay") ?? "") ?? .both
     @Published var customPath = UserDefaults.standard.string(forKey: "codexPath") ?? ""
     @Published var launchAtLogin = SMAppService.mainApp.status == .enabled
     var onChange: (() -> Void)?
@@ -33,13 +34,17 @@ final class UsageModel: ObservableObject {
 
     var isStale: Bool {
         guard let lastUpdated else { return true }
-        return errorMessage != nil || now.timeIntervalSince(lastUpdated) > 150 || snapshot?.remainingPercent(at: now) == nil
+        return errorMessage != nil || now.timeIntervalSince(lastUpdated) > 150
     }
 
-    var menuTitle: String {
-        guard let snapshot else { return "Codex —" }
-        guard !isStale, let remaining = snapshot.remainingPercent(at: now) else { return "Codex —" }
-        return "Codex \(remaining)%"
+    var indicator: MenuBarIndicator {
+        MenuBarIndicator(snapshot: snapshot, display: menuBarDisplay, isStale: isStale, now: now)
+    }
+
+    func setMenuBarDisplay(_ display: MenuBarDisplay) {
+        menuBarDisplay = display
+        UserDefaults.standard.set(display.rawValue, forKey: "menuBarDisplay")
+        onChange?()
     }
 
     var executablePath: String? { CodexExecutable.locate(customPath: customPath) }

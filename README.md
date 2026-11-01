@@ -2,12 +2,14 @@
 
 A small native macOS app that keeps your remaining Codex quota in the menu bar.
 
-**`Codex 72%`** — click to see each usage window and its reset time.
+**`5h 68% · 7d 92%`** — click to see each usage window and its reset time.
 
 - Remaining quota for every limit window returned by your account.
 - Reset countdowns and low-quota colors.
 - Automatic refresh every minute, on opening the popover, and after waking your Mac.
 - Optional launch at login.
+- Choose both limits, five-hour only, or weekly only in Settings.
+- Original Figma icon and typography, with an 18-point icon and system-tinted two-tone artwork.
 - Native interface that follows your Mac's light or dark appearance.
 - Free and open source under the [MIT license](LICENSE).
 
@@ -38,15 +40,15 @@ An API-key-only login does not provide your ChatGPT subscription quota. Usage wi
 
 ## What the percentage means
 
-The menu bar shows the **lowest remaining percentage** across the available windows and buckets. For example, if your five-hour quota has 72% left and your weekly quota has 84% left, it shows **72%**.
+The menu bar shows **remaining quota** for your five-hour (`5h`) and weekly (`7d`) limits. By default both are visible. Open the popover, click Settings, and use **Menu bar display** to show either limit on its own. Your selection is saved across launches.
 
-These are account quota percentages, not token counts or dollar spending. Reset times come from Codex. When data becomes stale, a request fails, or a reset time passes, the menu bar shows a dash until a fresh reading arrives. The popover retains the last reading for reference.
+These are account quota percentages, not token counts or dollar spending. Reset times come from Codex. When data becomes stale, a request fails, or a reset time passes, the affected value shows a dash until a fresh reading arrives. An account without a matching five-hour or weekly window also shows a dash for that value. The popover retains the last reading and lists all windows returned by the service.
 
 ## Privacy
 
 The app starts a local `codex app-server` process and calls only the initialization handshake and `account/rateLimits/read`. Codex handles authentication and contacts its own service to retrieve your limits.
 
-The app does not open your authentication files, run model prompts, inspect your projects or conversations, or upload usage to a separate server. There is no app analytics or third-party library dependency. Its saved settings contain only an optional Codex executable path; launch-at-login is managed by macOS. Codex itself still uses its existing local configuration and storage.
+The app does not open your authentication files, run model prompts, inspect your projects or conversations, or upload usage to a separate server. There is no app analytics or third-party library dependency. Its saved settings contain an optional Codex executable path and your menu bar display choice; launch-at-login is managed by macOS. Codex itself still uses its existing local configuration and storage.
 
 The integration uses the [documented Codex app-server protocol](https://learn.chatgpt.com/docs/app-server#6-rate-limits-chatgpt). That interface may evolve; update Codex if you encounter an unsupported response.
 
