@@ -5,6 +5,7 @@ import UsageCore
 @MainActor
 enum EntryPoint {
 static func main() {
+signal(SIGPIPE, SIG_IGN)
 if CommandLine.arguments.contains("--check") {
     Task {
         guard let path = CodexExecutable.locate() else {
@@ -33,7 +34,7 @@ if CommandLine.arguments.contains("--check") {
     let delegate = AppDelegate()
     application.delegate = delegate
     application.setActivationPolicy(.accessory)
-    application.run()
+    withExtendedLifetime(delegate) { application.run() }
 }
 }
 }

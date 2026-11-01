@@ -52,7 +52,7 @@ The integration uses the [documented Codex app-server protocol](https://learn.ch
 
 ## Build from source
 
-Install Xcode Command Line Tools or Xcode with Swift 5.9 or newer, then:
+Install Xcode with Swift 5.9 or newer and finish its first-launch setup, then:
 
 ```sh
 git clone https://github.com/alisov66/codex-usage-bar.git
@@ -69,6 +69,8 @@ bash scripts/build.sh universal
 ```
 
 The script creates a locally signed app, a zip archive, and SHA-256 checksums in `dist/`.
+
+Command Line Tools alone can build the app, but running the XCTest suite requires Xcode's test frameworks.
 
 Preview the interface using sample data:
 

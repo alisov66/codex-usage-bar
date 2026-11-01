@@ -4,7 +4,7 @@ cd "$(dirname "$0")/.."
 
 BUILD_ARCH="${1:-native}"
 case "$BUILD_ARCH" in
-  native) SWIFT_ARCH_ARGS=() ;;
+  native) SWIFT_ARCH_ARGS=(--arch "$(uname -m)") ;;
   universal) SWIFT_ARCH_ARGS=(--arch arm64 --arch x86_64) ;;
   *) echo "Usage: $0 [native|universal]" >&2; exit 1 ;;
 esac
