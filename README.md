@@ -92,4 +92,4 @@ Issues and pull requests are welcome. Run `swift test` and build the app before 
 
 ## Releases
 
-GitHub Actions tests and builds a universal app on pushes and pull requests. Pushing a `v*` tag creates a GitHub release with the zip and checksums after the checks pass. The build has read-only repository permissions; only the release job receives permission to publish release assets.
+GitHub Actions tests and builds a universal app on pushes and pull requests. Releases require the owner's separate confirmation and curated notes in `docs/releases/vX.Y.Z.md`. After approval and successful checks, pushing the matching `v*` tag publishes the release with those notes, the app zip, and checksums. The build has read-only repository permissions; only the release job receives permission to publish release assets.
