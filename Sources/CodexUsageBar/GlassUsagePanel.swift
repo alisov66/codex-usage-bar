@@ -11,6 +11,7 @@ final class GlassUsagePanel: NSPanel {
     private var localMonitor: Any?
     private var globalMonitor: Any?
     private var deactivateObserver: NSObjectProtocol?
+    private var openedAt: TimeInterval = 0
 
     init(model: UsageModel) {
         host = NSHostingController(rootView: UsageView(model: model))
@@ -21,6 +22,8 @@ final class GlassUsagePanel: NSPanel {
         isOpaque = false
         backgroundColor = .clear
         hasShadow = true
+        // Dismiss explicitly below, after activation has settled.
+        hidesOnDeactivate = false
         level = .popUpMenu
         animationBehavior = .utilityWindow
         collectionBehavior = [.transient, .fullScreenAuxiliary]
@@ -35,6 +38,7 @@ final class GlassUsagePanel: NSPanel {
     override var canBecomeMain: Bool { false }
 
     func show(relativeTo button: NSStatusBarButton) {
+        openedAt = ProcessInfo.processInfo.systemUptime
         anchor = button
         resizeToContent()
         makeKeyAndOrderFront(nil)
@@ -57,15 +61,22 @@ final class GlassUsagePanel: NSPanel {
     private func startDismissalMonitoring() {
         stopDismissalMonitoring()
         localMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
-            if let self, event.window !== self, event.window !== self.anchor?.window { self.close() }
+            if let self, event.timestamp > self.openedAt,
+               event.window !== self, event.window !== self.anchor?.window { self.close() }
             return event
         }
-        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
-            self?.close()
+        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
+            guard let self, event.timestamp > self.openedAt else { return }
+            self.close()
         }
         deactivateObserver = NotificationCenter.default.addObserver(
             forName: NSApplication.didResignActiveNotification, object: NSApp, queue: .main
-        ) { [weak self] _ in Task { @MainActor in self?.close() } }
+        ) { [weak self] _ in
+            Task { @MainActor in
+                // An older activation notification may be delivered after reopening.
+                if !NSApp.isActive { self?.close() }
+            }
+        }
     }
 
     private func stopDismissalMonitoring() {

@@ -6,6 +6,21 @@ import UsageCore
 enum EntryPoint {
     static func main() {
         signal(SIGPIPE, SIG_IGN)
+        if CommandLine.arguments.contains("--verify-panel") {
+            let application = NSApplication.shared
+            application.setActivationPolicy(.accessory)
+            Task { @MainActor in
+                do {
+                    try await PanelPresentationVerifier.run()
+                    exit(0)
+                } catch {
+                    fputs("Panel verification failed: \(error.localizedDescription)\n", stderr)
+                    exit(1)
+                }
+            }
+            application.run()
+            return
+        }
         if let flag = CommandLine.arguments.firstIndex(of: "--render-panels") {
             guard CommandLine.arguments.indices.contains(flag + 1) else {
                 fputs("Usage: CodexUsageBar --render-panels OUTPUT_DIRECTORY\n", stderr)

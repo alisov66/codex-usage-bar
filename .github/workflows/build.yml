@@ -47,9 +47,24 @@ jobs:
             dist/SHA256SUMS.txt
             dist/indicator-previews/
             dist/panel-previews/
+  panel-presentation:
+    needs: build
+    runs-on: macos-26
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Codex-Usage-Bar-macOS
+      - name: Verify live native panel presentation
+        run: |
+          ditto -xk Codex-Usage-Bar-macOS.zip .
+          python3 - <<'PY'
+          import subprocess
+          subprocess.run(['Codex Usage Bar.app/Contents/MacOS/CodexUsageBar', '--verify-panel'],
+                         check=True, timeout=30)
+          PY
   release:
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: build
+    needs: [build, panel-presentation]
     runs-on: ubuntu-latest
     permissions:
       contents: write

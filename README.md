@@ -82,6 +82,13 @@ Preview the interface using sample data:
 swift run CodexUsageBar --demo
 ```
 
+On macOS 26 or newer, verify the actual panel with synthetic data (opening,
+queued-click handling, Settings resizing, Escape, outside-click dismissal, and reopening):
+
+```sh
+"dist/Codex Usage Bar.app/Contents/MacOS/CodexUsageBar" --verify-panel
+```
+
 Check the live connection without opening the interface:
 
 ```sh
@@ -94,4 +101,4 @@ Issues and pull requests are welcome. Run `swift test` and build the app before 
 
 ## Releases
 
-GitHub Actions tests and builds a universal app on pushes and pull requests. Releases require the owner's separate confirmation and curated notes in `docs/releases/vX.Y.Z.md`. After approval and successful checks, pushing the matching `v*` tag publishes the release with those notes, the app zip, and checksums. The build has read-only repository permissions; only the release job receives permission to publish release assets.
+GitHub Actions tests and builds a universal app on pushes and pull requests, then verifies real panel presentation on macOS 26. Releases require the owner's separate confirmation and curated notes in `docs/releases/vX.Y.Z.md`. After approval and successful checks, pushing the matching `v*` tag publishes the release with those notes, the app zip, and checksums. The build has read-only repository permissions; only the release job receives permission to publish release assets.
