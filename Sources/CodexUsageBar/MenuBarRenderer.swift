@@ -48,9 +48,9 @@ final class MenuBarRenderer {
     private let font: NSFont
 
     init() {
-        let tokensURL = Bundle.module.url(forResource: "menu-bar-tokens", withExtension: "json", subdirectory: "Figma")!
+        let tokensURL = AppResources.bundle.url(forResource: "menu-bar-tokens", withExtension: "json", subdirectory: "Figma")!
         design = try! JSONDecoder().decode(MenuBarDesign.self, from: Data(contentsOf: tokensURL))
-        let iconURL = Bundle.module.url(forResource: "usage-icon", withExtension: "pdf", subdirectory: "Figma")!
+        let iconURL = AppResources.bundle.url(forResource: "usage-icon", withExtension: "pdf", subdirectory: "Figma")!
         icon = NSImage(contentsOf: iconURL)!
         let typography = design.typography
         // Use the explicit face when installed, otherwise obtain San Francisco through

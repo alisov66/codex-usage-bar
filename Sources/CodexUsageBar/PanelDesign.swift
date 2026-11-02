@@ -33,14 +33,14 @@ struct PanelDesign: Decodable {
     }
 
     static let shared: PanelDesign = {
-        let url = Bundle.module.url(forResource: "panel-tokens", withExtension: "json", subdirectory: "Figma")!
+        let url = AppResources.bundle.url(forResource: "panel-tokens", withExtension: "json", subdirectory: "Figma")!
         return try! JSONDecoder().decode(PanelDesign.self, from: Data(contentsOf: url))
     }()
 
     func textStyle(_ role: String) -> Typography { typography.first { $0.name == "Panel/" + role }! }
 
     private static let colorBundle: Bundle = {
-        Bundle(url: Bundle.module.url(forResource: "PanelColors", withExtension: "bundle")!)!
+        Bundle(url: AppResources.bundle.url(forResource: "PanelColors", withExtension: "bundle")!)!
     }()
 
     static func color(_ name: String) -> Color {
@@ -48,7 +48,7 @@ struct PanelDesign: Decodable {
     }
 
     static func icon(_ name: String) -> NSImage {
-        let url = Bundle.module.url(forResource: "panel-" + name, withExtension: "svg", subdirectory: "Figma")!
+        let url = AppResources.bundle.url(forResource: "panel-" + name, withExtension: "svg", subdirectory: "Figma")!
         let image = NSImage(contentsOf: url)!
         image.isTemplate = true
         return image

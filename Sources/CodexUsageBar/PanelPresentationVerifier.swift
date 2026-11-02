@@ -7,6 +7,8 @@ enum PanelPresentationVerifier {
         guard #available(macOS 26.0, *) else {
             throw failure("Live glass verification requires macOS 26 or newer.")
         }
+        try AppResources.verifyPackagedLocation()
+        print("Resources: \(AppResources.bundle.bundleURL.path)")
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         defer { NSStatusBar.system.removeStatusItem(item) }
         guard let button = item.button else { throw failure("No status button.") }
