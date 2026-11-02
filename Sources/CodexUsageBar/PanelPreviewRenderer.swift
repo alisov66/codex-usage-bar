@@ -24,14 +24,12 @@ enum PanelPreviewRenderer {
                                           backing: .buffered, defer: false)
                     window.isReleasedWhenClosed = false
                     window.appearance = appearance
-                    window.backgroundColor = .windowBackgroundColor
-                    // The review canvas uses Apple's material; the live app uses NSPopover's own shell.
-                    let material = NSVisualEffectView(frame: host.frame)
-                    material.material = .popover
-                    material.blendingMode = .withinWindow
-                    material.state = .active
+                    window.isOpaque = false
+                    window.backgroundColor = .clear
+                    // Share the live glass container. Offscreen snapshots cannot sample wallpaper.
+                    let material = PanelShell.make(content: host)
+                    material.frame = NSRect(origin: .zero, size: size)
                     window.contentView = material
-                    material.addSubview(host)
                     material.layoutSubtreeIfNeeded()
                     window.displayIfNeeded()
                     guard let bitmap = material.bitmapImageRepForCachingDisplay(in: material.bounds) else {
@@ -45,7 +43,8 @@ enum PanelPreviewRenderer {
                     try data.write(to: directory.appendingPathComponent(filename))
                     metadata.append(["file": filename, "width": size.width, "height": size.height,
                                      "phase": model.phase.rawValue, "hasData": model.hasPanelData,
-                                     "settingsExpanded": expanded, "appearance": dark ? "Dark" : "Light"])
+                                     "settingsExpanded": expanded, "appearance": dark ? "Dark" : "Light",
+                                     "shell": String(describing: type(of: material))])
                     window.close()
                 }
             }

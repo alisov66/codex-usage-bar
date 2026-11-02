@@ -14,6 +14,22 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      - name: Select newest installed Xcode
+        run: |
+          python3 - <<'PY' >> "$GITHUB_ENV"
+          import glob, re
+          paths = [path for path in glob.glob('/Applications/Xcode_*.app')
+                   if re.fullmatch(r'/Applications/Xcode_\d+(?:\.\d+)*\.app', path)]
+          def version(path):
+              return tuple(map(int, re.findall(r'\d+', path)))
+          selected = max(paths, key=version)
+          print('DEVELOPER_DIR=' + selected + '/Contents/Developer')
+          PY
+      - name: Verify current macOS SDK
+        run: |
+          xcodebuild -version
+          sdk_version="$(xcrun --sdk macosx --show-sdk-version)"
+          test "${sdk_version%%.*}" -ge 26
       - name: Test
         run: swift test
       - name: Build universal app

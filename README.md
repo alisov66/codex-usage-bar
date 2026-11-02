@@ -54,7 +54,7 @@ The integration uses the [documented Codex app-server protocol](https://learn.ch
 
 ## Build from source
 
-Install Xcode with Swift 5.9 or newer and finish its first-launch setup, then:
+Install Xcode 26 or newer and finish its first-launch setup, then:
 
 ```sh
 git clone https://github.com/alisov66/codex-usage-bar.git
@@ -72,7 +72,9 @@ bash scripts/build.sh universal
 
 The script creates a locally signed app, a zip archive, and SHA-256 checksums in `dist/`.
 
-Command Line Tools alone can build the app, but running the XCTest suite requires Xcode's test frameworks.
+Current Command Line Tools with the macOS 26 SDK or newer can also build the app, but running the XCTest suite requires Xcode's test frameworks. The build records the actual SDK version in both architectures so modern macOS controls are enabled, while retaining macOS 13 as the minimum supported system.
+
+On macOS 26 and later, the dropdown uses Apple's native Liquid Glass container in a rounded, arrow-free panel. Earlier versions retain the native popover. The launch-at-login switch uses the standard system appearance for the running OS.
 
 Preview the interface using sample data:
 

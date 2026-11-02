@@ -5,6 +5,7 @@ import SwiftUI
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private let popover = NSPopover()
+    private var glassPanel: NSPanel?
     private let model: UsageModel = {
         let arguments = CommandLine.arguments
         let preview = arguments.firstIndex(of: "--panel-state").flatMap { index in
@@ -24,10 +25,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             button.target = self
             button.action = #selector(togglePopover)
         }
-        popover.behavior = .transient
-        let content = NSHostingController(rootView: UsageView(model: model))
-        content.sizingOptions = [.preferredContentSize]
-        popover.contentViewController = content
+        if #available(macOS 26.0, *) {
+            glassPanel = GlassUsagePanel(model: model)
+        } else {
+            popover.behavior = .transient
+            let content = NSHostingController(rootView: UsageView(model: model))
+            content.sizingOptions = [.preferredContentSize]
+            popover.contentViewController = content
+        }
         model.onChange = { [weak self] in self?.updateStatus() }
         updateStatus()
         if !model.isDemo { model.refresh() }
@@ -48,13 +53,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc private func togglePopover() {
-        if popover.isShown { popover.performClose(nil) }
+        if #available(macOS 26.0, *), let panel = glassPanel as? GlassUsagePanel, panel.isVisible { panel.close() }
+        else if popover.isShown { popover.performClose(nil) }
         else { showPopover(); model.refresh() }
     }
 
     private func showPopover() {
         guard let button = statusItem.button else { return }
         NSApp.activate(ignoringOtherApps: true)
+        if #available(macOS 26.0, *), let panel = glassPanel as? GlassUsagePanel {
+            panel.show(relativeTo: button)
+            return
+        }
         popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
         popover.contentViewController?.view.window?.makeKey()
     }
