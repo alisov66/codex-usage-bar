@@ -17,6 +17,7 @@ enum PanelPresentationVerifier {
         let panel = GlassUsagePanel(model: model)
         defer { panel.close() }
         try await Task.sleep(nanoseconds: 200_000_000)
+        print("Screens: \(NSScreen.screens.map { $0.visibleFrame }), status window: \(String(describing: button.window?.frame)), status screen: \(String(describing: button.window?.screen))")
         NSApp.activate(ignoringOtherApps: true)
         panel.show(relativeTo: button)
         try await Task.sleep(nanoseconds: 300_000_000)

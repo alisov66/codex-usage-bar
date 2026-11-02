@@ -42,18 +42,25 @@ final class GlassUsagePanel: NSPanel {
         anchor = button
         resizeToContent()
         makeKeyAndOrderFront(nil)
+        // The remote menu-bar host can finish assigning its screen after ordering.
+        DispatchQueue.main.async { [weak self] in self?.resizeToContent() }
         startDismissalMonitoring()
     }
 
     private func resizeToContent() {
-        guard let anchor, let window = anchor.window, let screen = window.screen else { return }
+        guard let anchor, let window = anchor.window else { return }
+        let target = window.convertToScreen(anchor.convert(anchor.bounds, to: nil))
+        guard let screen = window.screen
+                ?? NSScreen.screens.first(where: { $0.frame.intersects(target) })
+                ?? NSScreen.main else { return }
         let preferred = host.preferredContentSize
         let size = preferred.width > 0 && preferred.height > 0 ? preferred : host.view.fittingSize
         guard size.width > 0 && size.height > 0 else { return }
-        let target = window.convertToScreen(anchor.convert(anchor.bounds, to: nil))
         let available = screen.visibleFrame.insetBy(dx: 8, dy: 0)
-        let left = min(max(target.midX - size.width / 2, available.minX), available.maxX - size.width)
-        let top = min(target.minY, available.maxY) - 4
+        let hasPosition = !target.isEmpty && screen.frame.intersects(target)
+        let center = hasPosition ? target.midX : available.maxX - size.width / 2
+        let left = min(max(center - size.width / 2, available.minX), available.maxX - size.width)
+        let top = (hasPosition ? min(target.minY, available.maxY) : available.maxY) - 4
         setFrame(NSRect(x: left, y: max(available.minY, top - size.height),
                         width: size.width, height: size.height), display: true)
     }
