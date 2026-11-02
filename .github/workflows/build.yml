@@ -20,6 +20,8 @@ jobs:
         run: bash scripts/build.sh universal
       - name: Verify bundled Figma resources and render all display modes
         run: '"dist/Codex Usage Bar.app/Contents/MacOS/CodexUsageBar" --render-indicators dist/indicator-previews'
+      - name: Verify panel colors, vector icons, and all panel states
+        run: '"dist/Codex Usage Bar.app/Contents/MacOS/CodexUsageBar" --render-panels dist/panel-previews'
       - name: Upload app
         uses: actions/upload-artifact@v4
         with:
@@ -28,6 +30,7 @@ jobs:
             dist/Codex-Usage-Bar-macOS.zip
             dist/SHA256SUMS.txt
             dist/indicator-previews/
+            dist/panel-previews/
   release:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: build

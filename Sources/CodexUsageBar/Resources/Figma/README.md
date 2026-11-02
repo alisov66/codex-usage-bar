@@ -15,3 +15,16 @@ swift run CodexUsageBar --render-indicators /tmp/codex-indicator-previews
 ```
 
 This exports all three display modes in light and dark preview colors at Retina resolution, using synthetic data matching Figma (68% and 92%).
+
+## Usage panel
+
+Source: https://www.figma.com/design/zCrkvUn8WyWUKH3YYn6QB0?node-id=63-4813
+
+- `panel-tokens.json` records the approved layout, resolved light/dark color variables, and six `Panel` text styles. SF Pro maps to the public system font at the design's explicit sizes and weights; font files are not distributed.
+- `panel-nav-arrow.svg` is the original 16 × 16 design-context export used by the Settings disclosure. `panel-refresh.svg` is the original 10 × 10 retry icon. Both retain their exported geometry and render as system-tinted templates.
+- Named panel colors live in `Resources/PanelColors.xcassets`. The checked-in `PanelColors.bundle` contains their compiled asset catalog for Swift package builds. After changing the source catalog, run `bash scripts/build-panel-colors.sh`; normal builds verify its source checksum.
+- The shell/background and switch variables in Figma are design-only emulations. The app uses `NSPopover`'s own native background and a standard macOS switch; their appearance follows the running OS and accessibility settings.
+- `--render-panels OUTPUT_DIRECTORY` validates all named colors against the JSON values in both appearances, checks original icon dimensions, and exports every panel state in Light and Dark. The offscreen review uses a native material but cannot reproduce the live wallpaper backdrop or the active-window tint of a switch.
+- `--demo --panel-state ready --settings-expanded` opens the interactive panel with synthetic data. Supported scenarios are `loading`, `ready`, `refresh-failed`, `refresh-failed-empty`, `retrying`, `retrying-empty`, `codex-missing`, `sign-in-required`, and `expired`. Preview interactions do not save preferences or register login items.
+
+The panel keeps old readings on refresh failures and retries. Unavailable readings use dashes; passed reset timestamps invalidate that window instead of claiming a fresh quota reset. Refreshing normally retains the ready layout, without a persistent refresh control.

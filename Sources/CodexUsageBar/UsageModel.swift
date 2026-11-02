@@ -3,10 +3,17 @@ import Combine
 import ServiceManagement
 import UsageCore
 
+enum PanelPreviewScenario: String, CaseIterable {
+    case loading, ready, refreshFailed = "refresh-failed", refreshFailedEmpty = "refresh-failed-empty"
+    case retrying, retryingEmpty = "retrying-empty", codexMissing = "codex-missing", signInRequired = "sign-in-required"
+    case expired
+}
+
 @MainActor
 final class UsageModel: ObservableObject {
     @Published var snapshot: UsageSnapshot?
     @Published var errorMessage: String?
+    @Published var failure: PanelFailure?
     @Published var isRefreshing = false
     @Published var lastUpdated: Date?
     @Published var now = Date()
@@ -21,21 +28,31 @@ final class UsageModel: ObservableObject {
     private var lastAttempt: Date?
     let isDemo: Bool
 
-    init(demo: Bool = false) {
-        isDemo = demo
-        if demo {
-            snapshot = .demo
-            lastUpdated = Date()
-        }
-        timer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { [weak self] _ in
-            Task { @MainActor in self?.tick() }
+    init(demo: Bool = false, preview: PanelPreviewScenario? = nil, expanded: Bool = false) {
+        isDemo = demo || preview != nil
+        showSettings = expanded
+        if isDemo {
+            configurePreview(preview ?? .ready)
+        } else {
+            timer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { [weak self] _ in
+                Task { @MainActor in self?.tick() }
+            }
         }
     }
 
+    var hasPanelData: Bool { snapshot?.panelBucket?.windows.isEmpty == false }
+
     var isStale: Bool {
         guard let lastUpdated else { return true }
-        return errorMessage != nil || now.timeIntervalSince(lastUpdated) > 150
+        return failure != nil || now.timeIntervalSince(lastUpdated) > 150
     }
+
+    var phase: PanelPhase {
+        PanelPhase(hasData: hasPanelData, isRefreshing: isRefreshing, isStale: isStale, failure: failure)
+    }
+
+    var planTitle: String? { snapshot?.panelBucket?.planType?.capitalized }
+    var quotas: [PanelQuota] { snapshot?.panelQuotas ?? UsageSnapshot.emptyPanelQuotas }
 
     var indicator: MenuBarIndicator {
         MenuBarIndicator(snapshot: snapshot, display: menuBarDisplay, isStale: isStale, now: now)
@@ -43,11 +60,15 @@ final class UsageModel: ObservableObject {
 
     func setMenuBarDisplay(_ display: MenuBarDisplay) {
         menuBarDisplay = display
-        UserDefaults.standard.set(display.rawValue, forKey: "menuBarDisplay")
+        if !isDemo { UserDefaults.standard.set(display.rawValue, forKey: "menuBarDisplay") }
         onChange?()
     }
 
     var executablePath: String? { CodexExecutable.locate(customPath: customPath) }
+
+    var displayedExecutablePath: String {
+        isDemo ? "/usr/local/bin/codex" : executablePath ?? (customPath.isEmpty ? "Not found" : customPath)
+    }
 
     private func tick() {
         now = Date()
@@ -57,22 +78,43 @@ final class UsageModel: ObservableObject {
     }
 
     func refresh() {
-        guard !isDemo, !isRefreshing else { return }
+        guard !isRefreshing else { return }
+        if isDemo {
+            isRefreshing = true
+            refreshTask = Task {
+                try? await Task.sleep(nanoseconds: 800_000_000)
+                guard !Task.isCancelled else { return }
+                configurePreview(.ready)
+                onChange?()
+            }
+            return
+        }
         lastAttempt = Date()
         guard let path = executablePath else {
+            failure = .codexMissing
             errorMessage = CodexError.missingExecutable.localizedDescription
             onChange?()
             return
         }
+        // Retry setup as a fresh load, preserving ordinary failures until recovery.
+        if failure == .codexMissing || failure == .signInRequired { failure = nil; errorMessage = nil }
         isRefreshing = true
         refreshTask = Task {
             defer { isRefreshing = false; onChange?() }
             do {
-                snapshot = try await client.readLimits(executablePath: path)
+                let next = try await client.readLimits(executablePath: path)
+                guard next.panelBucket?.windows.isEmpty == false else {
+                    failure = .refresh
+                    errorMessage = "Codex returned no usage limits for this account."
+                    return
+                }
+                snapshot = next
                 lastUpdated = Date()
                 now = Date()
+                failure = nil
                 errorMessage = nil
             } catch {
+                failure = PanelFailure(error: error)
                 errorMessage = error.localizedDescription
             }
         }
@@ -80,25 +122,20 @@ final class UsageModel: ObservableObject {
 
     func chooseExecutable() {
         let panel = NSOpenPanel()
-        panel.title = "Choose the Codex executable"
+        panel.title = "Locate Codex"
         panel.message = "Choose the codex executable installed by Homebrew, npm, or the Codex app."
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = false
         panel.showsHiddenFiles = true
         if panel.runModal() == .OK, let url = panel.url {
             customPath = url.path
-            UserDefaults.standard.set(customPath, forKey: "codexPath")
+            if !isDemo { UserDefaults.standard.set(customPath, forKey: "codexPath") }
             refresh()
         }
     }
 
-    func useAutomaticLocation() {
-        customPath = ""
-        UserDefaults.standard.removeObject(forKey: "codexPath")
-        refresh()
-    }
-
     func setLaunchAtLogin(_ enabled: Bool) {
+        if isDemo { launchAtLogin = enabled; return }
         do {
             if enabled { try SMAppService.mainApp.register() }
             else { try SMAppService.mainApp.unregister() }
@@ -106,7 +143,9 @@ final class UsageModel: ObservableObject {
             if enabled && !launchAtLogin { SMAppService.openSystemSettingsLoginItems() }
         } catch {
             launchAtLogin = SMAppService.mainApp.status == .enabled
-            errorMessage = "Could not change launch at login: \(error.localizedDescription)"
+            let alert = NSAlert(error: error)
+            alert.messageText = "Could not change launch at login"
+            alert.runModal()
         }
     }
 
@@ -114,5 +153,34 @@ final class UsageModel: ObservableObject {
         timer?.invalidate()
         refreshTask?.cancel()
         await client.shutdown()
+    }
+
+    private func configurePreview(_ scenario: PanelPreviewScenario) {
+        menuBarDisplay = .fiveHour
+        launchAtLogin = true
+        failure = nil
+        errorMessage = nil
+        isRefreshing = false
+        snapshot = nil
+        lastUpdated = nil
+        now = Date()
+        if [.ready, .refreshFailed, .retrying, .expired].contains(scenario) {
+            let firstReset = now.addingTimeInterval(scenario == .expired ? -10 : 8460).timeIntervalSince1970
+            let secondReset = now.addingTimeInterval(576000).timeIntervalSince1970
+            snapshot = try! JSONDecoder().decode(UsageSnapshot.self, from: Data("""
+            {"rateLimits":{"limitId":"codex","planType":"plus",
+            "primary":{"usedPercent":50,"windowDurationMins":300,"resetsAt":\(firstReset)},
+            "secondary":{"usedPercent":50,"windowDurationMins":10080,"resetsAt":\(secondReset)}}}
+            """.utf8))
+            lastUpdated = now
+        }
+        switch scenario {
+        case .loading: isRefreshing = true
+        case .refreshFailed, .refreshFailedEmpty: failure = .refresh
+        case .retrying, .retryingEmpty: failure = .refresh; isRefreshing = true
+        case .codexMissing: failure = .codexMissing
+        case .signInRequired: failure = .signInRequired
+        case .ready, .expired: break
+        }
     }
 }

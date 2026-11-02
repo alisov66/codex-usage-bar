@@ -4,13 +4,13 @@ A small native macOS app that keeps your remaining Codex quota in the menu bar.
 
 **`5h 68% · 7d 92%`** — click to see each usage window and its reset time.
 
-- Remaining quota for every limit window returned by your account.
-- Reset countdowns and low-quota colors.
+- Remaining quota and reset countdowns for your account's Codex limit windows.
 - Automatic refresh every minute, on opening the popover, and after waking your Mac.
 - Optional launch at login.
 - Choose both limits, five-hour only, or weekly only in Settings.
 - Original Figma artwork and typography, with a 24-point icon target that fits shorter menu bars and system-tinted two-tone artwork.
 - Native interface that follows your Mac's light or dark appearance.
+- Figma-designed panel with native macOS background effects and launch-at-login switch, plus explicit loading, retry, and setup states.
 - Free and open source under the [MIT license](LICENSE).
 
 Independent community project. Not affiliated with or endorsed by OpenAI.
@@ -34,15 +34,15 @@ Early releases are ad-hoc signed, without Apple notarization. macOS may block a 
 
 3. Open Codex Usage Bar. Its icon appears in the menu bar.
 
-The app looks in your environment's PATH, standard Homebrew locations, and known desktop-app locations. If it cannot find Codex, click **Settings → Choose…** and select the `codex` executable. For version-managed Node installations, select the executable inside your active Node version's bin directory.
+The app looks in your environment's PATH, standard Homebrew locations, and known desktop-app locations. If it cannot find Codex, click **Locate Codex**, or **Settings → Codex location → Choose**, and select the `codex` executable. For version-managed Node installations, select the executable inside your active Node version's bin directory.
 
 An API-key-only login does not provide your ChatGPT subscription quota. Usage windows vary by account; the app displays what Codex returns rather than assuming a particular plan or quota.
 
 ## What the percentage means
 
-The menu bar shows **remaining quota** for your five-hour (`5h`) and weekly (`7d`) limits. By default both are visible. Open the popover, click Settings, and use **Menu bar display** to show either limit on its own. Your selection is saved across launches.
+The menu bar shows **remaining quota** for your five-hour (`5h`) and weekly (`7d`) limits. By default both are visible. Open the panel, expand Settings, and use **Menu bar** to show either limit on its own. Your selection is saved across launches.
 
-These are account quota percentages, not token counts or dollar spending. Reset times come from Codex. When data becomes stale, a request fails, or a reset time passes, the affected value shows a dash until a fresh reading arrives. An account without a matching five-hour or weekly window also shows a dash for that value. The popover retains the last reading and lists all windows returned by the service.
+These are account quota percentages, not token counts or dollar spending. Reset times come from Codex. The menu bar shows a dash when readings are stale or unavailable. The panel retains older readings with a last-update timestamp and offers **Try again** after a failed refresh. Once a reset time passes, that quota shows a dash and **Awaiting refresh** until a new reading arrives. Missing data never appears as 0% or 100% remaining. The panel and menu bar use the same Codex account bucket.
 
 ## Privacy
 

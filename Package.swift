@@ -7,7 +7,7 @@ let package = Package(
     products: [.executable(name: "CodexUsageBar", targets: ["CodexUsageBar"])],
     targets: [
         .target(name: "UsageCore"),
-        .executableTarget(name: "CodexUsageBar", dependencies: ["UsageCore"], resources: [.copy("Resources/Figma")]),
+        .executableTarget(name: "CodexUsageBar", dependencies: ["UsageCore"], resources: [.copy("Resources/Figma"), .copy("Resources/PanelColors.bundle")]),
         .testTarget(name: "UsageCoreTests", dependencies: ["UsageCore"])
     ]
 )

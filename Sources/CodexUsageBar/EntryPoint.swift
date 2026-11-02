@@ -6,6 +6,19 @@ import UsageCore
 enum EntryPoint {
     static func main() {
         signal(SIGPIPE, SIG_IGN)
+        if let flag = CommandLine.arguments.firstIndex(of: "--render-panels") {
+            guard CommandLine.arguments.indices.contains(flag + 1) else {
+                fputs("Usage: CodexUsageBar --render-panels OUTPUT_DIRECTORY\n", stderr)
+                exit(1)
+            }
+            do {
+                try PanelPreviewRenderer.writePreviews(to: URL(fileURLWithPath: CommandLine.arguments[flag + 1], isDirectory: true))
+                exit(0)
+            } catch {
+                fputs("Could not render panel previews: \(error.localizedDescription)\n", stderr)
+                exit(1)
+            }
+        }
         if let flag = CommandLine.arguments.firstIndex(of: "--render-indicators") {
             guard CommandLine.arguments.indices.contains(flag + 1) else {
                 fputs("Usage: CodexUsageBar --render-indicators OUTPUT_DIRECTORY\n", stderr)
@@ -44,6 +57,13 @@ enum EntryPoint {
             }
             dispatchMain()
         } else {
+            if let flag = CommandLine.arguments.firstIndex(of: "--panel-state") {
+                guard CommandLine.arguments.indices.contains(flag + 1),
+                      PanelPreviewScenario(rawValue: CommandLine.arguments[flag + 1]) != nil else {
+                    fputs("Unknown panel preview state.\n", stderr)
+                    exit(1)
+                }
+            }
             let application = NSApplication.shared
             let delegate = AppDelegate()
             application.delegate = delegate

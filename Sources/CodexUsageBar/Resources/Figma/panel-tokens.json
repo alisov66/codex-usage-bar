@@ -1,0 +1,305 @@
+{
+  "source": {
+    "file": "zCrkvUn8WyWUKH3YYn6QB0",
+    "node": "63:4813"
+  },
+  "typography": [
+    {
+      "name": "Panel/Title",
+      "family": "SF Pro",
+      "weight": "Semibold",
+      "size": 16,
+      "lineHeight": 20
+    },
+    {
+      "name": "Panel/Value",
+      "family": "SF Pro",
+      "weight": "Regular",
+      "size": 20,
+      "lineHeight": 24
+    },
+    {
+      "name": "Panel/Body",
+      "family": "SF Pro",
+      "weight": "Regular",
+      "size": 14,
+      "lineHeight": 18
+    },
+    {
+      "name": "Panel/Label",
+      "family": "SF Pro",
+      "weight": "Medium",
+      "size": 14,
+      "lineHeight": 18
+    },
+    {
+      "name": "Panel/Button",
+      "family": "SF Pro",
+      "weight": "Medium",
+      "size": 13,
+      "lineHeight": 18
+    },
+    {
+      "name": "Panel/Caption",
+      "family": "SF Pro",
+      "weight": "Regular",
+      "size": 12,
+      "lineHeight": 16
+    }
+  ],
+  "layout": {
+    "width": 302,
+    "padding": 16,
+    "sectionSpacing": 16,
+    "headerSpacing": 8,
+    "headerBottom": 8,
+    "rowSpacing": 4,
+    "labelSpacing": 12,
+    "valueSpacing": 2,
+    "resetSpacing": 4,
+    "controlHeight": 24,
+    "controlRadius": 8,
+    "controlPadding": 8,
+    "buttonSpacing": 6,
+    "disclosurePadding": 8,
+    "progressHeight": 4,
+    "navIconSize": 16,
+    "refreshIconSize": 10,
+    "spinnerSize": 12,
+    "setupHeight": 325
+  },
+  "colors": {
+    "Light": {
+      "panel/foreground": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "panel/foreground-muted": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.7
+      },
+      "panel/foreground-subtle": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.25
+      },
+      "panel/control/fill-selected": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "panel/control/fill-muted": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.7
+      },
+      "panel/control/fill-subtle": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.25
+      },
+      "panel/control/fill-inverted": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      },
+      "panel/control/fill-hover": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.7
+      },
+      "panel/control/fill": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.25
+      },
+      "panel/control/foreground": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "panel/control/foreground-muted": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.7
+      },
+      "panel/control/foreground-disabled": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.25
+      },
+      "panel/foreground-on-fill": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      },
+      "panel/foreground-on-fill-muted": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.7
+      },
+      "panel/foreground-on-fill-disabled": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.25
+      },
+      "panel/progress/track": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.25
+      },
+      "panel/progress/fill": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "panel/progress/fill-stale": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.25
+      },
+      "panel/selector/fill": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.25
+      }
+    },
+    "Dark": {
+      "panel/foreground": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      },
+      "panel/foreground-muted": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.7
+      },
+      "panel/foreground-subtle": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.25
+      },
+      "panel/control/fill-selected": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      },
+      "panel/control/fill-muted": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.7
+      },
+      "panel/control/fill-subtle": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.25
+      },
+      "panel/control/fill-inverted": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "panel/control/fill-hover": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.7
+      },
+      "panel/control/fill": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.25
+      },
+      "panel/control/foreground": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      },
+      "panel/control/foreground-muted": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.7
+      },
+      "panel/control/foreground-disabled": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.25
+      },
+      "panel/foreground-on-fill": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "panel/foreground-on-fill-muted": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.7
+      },
+      "panel/foreground-on-fill-disabled": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.25
+      },
+      "panel/progress/track": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.25
+      },
+      "panel/progress/fill": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      },
+      "panel/progress/fill-stale": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.25
+      },
+      "panel/selector/fill": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.25
+      }
+    }
+  }
+}

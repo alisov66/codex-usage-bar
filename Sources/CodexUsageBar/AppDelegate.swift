@@ -5,7 +5,14 @@ import SwiftUI
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private let popover = NSPopover()
-    private let model = UsageModel(demo: CommandLine.arguments.contains("--demo"))
+    private let model: UsageModel = {
+        let arguments = CommandLine.arguments
+        let preview = arguments.firstIndex(of: "--panel-state").flatMap { index in
+            arguments.indices.contains(index + 1) ? PanelPreviewScenario(rawValue: arguments[index + 1]) : nil
+        }
+        return UsageModel(demo: arguments.contains("--demo"), preview: preview,
+                          expanded: arguments.contains("--settings-expanded"))
+    }()
     private let renderer = MenuBarRenderer()
     private var wakeObserver: NSObjectProtocol?
 
@@ -18,10 +25,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             button.action = #selector(togglePopover)
         }
         popover.behavior = .transient
-        popover.contentViewController = NSHostingController(rootView: UsageView(model: model))
+        let content = NSHostingController(rootView: UsageView(model: model))
+        content.sizingOptions = [.preferredContentSize]
+        popover.contentViewController = content
         model.onChange = { [weak self] in self?.updateStatus() }
         updateStatus()
-        model.refresh()
+        if !model.isDemo { model.refresh() }
         wakeObserver = NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didWakeNotification, object: nil, queue: .main
         ) { [weak self] _ in Task { @MainActor in self?.model.refresh() } }
