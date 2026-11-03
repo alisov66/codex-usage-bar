@@ -1,3 +1,7 @@
+![Watch the Limits — Your Codex usage, at a glance.](docs/images/watch-the-limits-banner.png)
+
+[**Download Latest Release**](https://github.com/alisov66/watch-the-limits/releases/latest)
+
 # Watch the Limits
 
 A small native macOS app that keeps your remaining Codex quota in the menu bar.
