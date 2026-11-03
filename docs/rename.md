@@ -10,7 +10,7 @@ The project, previously called **Codex Usage Bar**, is now **Watch the Limits**.
 - New release archive: `Watch-the-Limits-macOS.zip`
 - Codex app-server client name: `watch_the_limits`
 
-The rename does not create a public release or change the current version. Historical releases through v0.4.1 retain their original asset names and installation instructions. Until a renamed release is approved and published, download those existing releases or build the renamed app from source.
+Version **v0.5.0** is the first release prepared under the new name. Publication still requires the owner's release approval. Historical releases through v0.4.1 retain their original asset names and installation instructions.
 
 ## Updating an existing installation
 

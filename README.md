@@ -21,7 +21,7 @@ Independent community project. Not affiliated with or endorsed by OpenAI.
 
 Download the app from the [latest release](https://github.com/alisov66/watch-the-limits/releases/latest), unzip it, and move the app to Applications.
 
-The rename is currently in development. Existing releases through **v0.4.1** retain their original **Codex-Usage-Bar-macOS.zip** and **Codex Usage Bar.app** names. Future approved releases will use **Watch-the-Limits-macOS.zip** and **Watch the Limits.app**.
+Starting with **v0.5.0**, the download is **Watch-the-Limits-macOS.zip**, containing **Watch the Limits.app**. Existing releases through **v0.4.1** retain their original names. When updating from Codex Usage Bar, quit the old app first, install the renamed app in Applications, and remove the old copy after verifying the new one works.
 
 Requires **macOS 13 Ventura or newer**. Release builds include both Apple Silicon and Intel support. You also need a local Codex installation signed in with your ChatGPT account.
 
