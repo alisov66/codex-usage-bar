@@ -27,7 +27,7 @@ struct UsageView: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: layout.headerSpacing) {
             HStack(alignment: .firstTextBaseline, spacing: layout.valueSpacing) {
-                PanelText("Codex Usage", role: "Title")
+                PanelText("Watch the Limits", role: "Title")
                 Spacer(minLength: 0)
                 if !model.phase.requiresSetup, let plan = model.planTitle {
                     PanelText(plan).foregroundStyle(PanelDesign.color("foreground-muted"))
@@ -168,13 +168,13 @@ struct UsageView: View {
             Button("Quit") { NSApp.terminate(nil) }
                 .buttonStyle(PanelButtonStyle())
                 .keyboardShortcut("q", modifiers: .command)
-                .accessibilityLabel("Quit Codex Usage Bar")
+                .accessibilityLabel("Quit Watch the Limits")
         }
         .padding(layout.padding)
     }
 
     private func openProject(_ fragment: String) {
-        NSWorkspace.shared.open(URL(string: "https://github.com/alisov66/codex-usage-bar\(fragment)")!)
+        NSWorkspace.shared.open(URL(string: "https://github.com/alisov66/watch-the-limits\(fragment)")!)
     }
 }
 

@@ -18,7 +18,7 @@ final class GlassUsagePanel: NSPanel {
         host.sizingOptions = [.preferredContentSize]
         super.init(contentRect: .zero, styleMask: [.borderless], backing: .buffered, defer: false)
         isReleasedWhenClosed = false
-        title = "Codex Usage"
+        title = "Watch the Limits"
         isOpaque = false
         backgroundColor = .clear
         hasShadow = true

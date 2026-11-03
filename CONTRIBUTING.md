@@ -7,7 +7,7 @@ swift test
 bash scripts/build.sh
 ```
 
-`UsageCore` contains quota decoding and the local Codex protocol client. `CodexUsageBar` contains the menu bar interface and preferences.
+`UsageCore` contains quota decoding and the local Codex protocol client. `WatchTheLimits` contains the menu bar interface and preferences.
 
 ## Design and release workflow
 

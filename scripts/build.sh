@@ -23,19 +23,19 @@ BIN_DIR=""
 for architecture in "${BUILD_ARCHES[@]}"; do
   swift build --build-system native -c release --arch "$architecture" --sdk "$BUILD_SDK"
   architecture_dir="$(swift build --build-system native -c release --arch "$architecture" --sdk "$BUILD_SDK" --show-bin-path | tail -n 1)"
-  BUILD_BINARIES+=("$architecture_dir/CodexUsageBar")
+  BUILD_BINARIES+=("$architecture_dir/WatchTheLimits")
   if [ -z "$BIN_DIR" ]; then BIN_DIR="$architecture_dir"; fi
 done
-BUILD_STAGING="$(mktemp -d "${TMPDIR:-/tmp}/codex-usage-build.XXXXXX")"
+BUILD_STAGING="$(mktemp -d "${TMPDIR:-/tmp}/watch-the-limits-build.XXXXXX")"
 trap 'rm -rf "$BUILD_STAGING"' EXIT
-APP="$BUILD_STAGING/Codex Usage Bar.app"
+APP="$BUILD_STAGING/Watch the Limits.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 if [ "${#BUILD_BINARIES[@]}" -eq 1 ]; then
-  cp "${BUILD_BINARIES[0]}" "$APP/Contents/MacOS/CodexUsageBar"
+  cp "${BUILD_BINARIES[0]}" "$APP/Contents/MacOS/WatchTheLimits"
 else
-  lipo -create "${BUILD_BINARIES[@]}" -output "$APP/Contents/MacOS/CodexUsageBar"
+  lipo -create "${BUILD_BINARIES[@]}" -output "$APP/Contents/MacOS/WatchTheLimits"
 fi
-BUILD_VERSION_INFO="$(vtool -show-build "$APP/Contents/MacOS/CodexUsageBar")"
+BUILD_VERSION_INFO="$(vtool -show-build "$APP/Contents/MacOS/WatchTheLimits")"
 if ! awk -v sdk="$BUILD_SDK_VERSION" '
   $1 == "sdk" { count++; if ($2 + 0 != sdk + 0) failed = 1 }
   $1 == "minos" && $2 != "13.0" { failed = 1 }
@@ -49,16 +49,14 @@ shasum -a 256 -c Resources/AppIcon/source.sha256
 shasum -a 256 -c Resources/PanelColors.sha256
 cp Resources/AppIcon/Compiled/Assets.car "$APP/Contents/Resources/Assets.car"
 cp Resources/AppIcon/Compiled/CodexAppIcon.icns "$APP/Contents/Resources/CodexAppIcon.icns"
-for resource in "$BIN_DIR/"*.bundle; do
-  if [ -d "$resource" ]; then cp -R "$resource" "$APP/Contents/Resources/"; fi
-done
+cp -R "$BIN_DIR/WatchTheLimits_WatchTheLimits.bundle" "$APP/Contents/Resources/"
 codesign --force --sign - "$APP"
 mkdir -p dist
-if [ -e "dist/Codex Usage Bar.app" ]; then
-  mv "dist/Codex Usage Bar.app" "$BUILD_STAGING/previous.app"
+if [ -e "dist/Watch the Limits.app" ]; then
+  mv "dist/Watch the Limits.app" "$BUILD_STAGING/previous.app"
 fi
-mv "$APP" "dist/Codex Usage Bar.app"
-APP="dist/Codex Usage Bar.app"
-ditto -c -k --sequesterRsrc --keepParent "$APP" "dist/Codex-Usage-Bar-macOS.zip"
-(cd dist && shasum -a 256 Codex-Usage-Bar-macOS.zip > SHA256SUMS.txt)
+mv "$APP" "dist/Watch the Limits.app"
+APP="dist/Watch the Limits.app"
+ditto -c -k --sequesterRsrc --keepParent "$APP" "dist/Watch-the-Limits-macOS.zip"
+(cd dist && shasum -a 256 Watch-the-Limits-macOS.zip > SHA256SUMS.txt)
 echo "Built $APP"

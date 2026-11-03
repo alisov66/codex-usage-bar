@@ -11,7 +11,7 @@ The system-font family maps to the public AppKit system font when the separately
 To review the same native rendering used by the status button:
 
 ```sh
-swift run CodexUsageBar --render-indicators /tmp/codex-indicator-previews
+swift run WatchTheLimits --render-indicators /tmp/codex-indicator-previews
 ```
 
 This exports all three display modes in light and dark preview colors at Retina resolution, using synthetic data matching Figma (68% and 92%).

@@ -1,6 +1,8 @@
-# Codex Usage Bar
+# Watch the Limits
 
 A small native macOS app that keeps your remaining Codex quota in the menu bar.
+
+Previously named **Codex Usage Bar**. The rename preserves existing preferences and the app's macOS identity. See [the rename notes](docs/rename.md) for upgrade details.
 
 **`5h 68% · 7d 92%`** — click to see each usage window and its reset time.
 
@@ -17,7 +19,9 @@ Independent community project. Not affiliated with or endorsed by OpenAI.
 
 ## Download
 
-Get **Codex-Usage-Bar-macOS.zip** from the [latest release](https://github.com/alisov66/codex-usage-bar/releases/latest), unzip it, and move **Codex Usage Bar.app** to Applications.
+Download the app from the [latest release](https://github.com/alisov66/watch-the-limits/releases/latest), unzip it, and move the app to Applications.
+
+The rename is currently in development. Existing releases through **v0.4.1** retain their original **Codex-Usage-Bar-macOS.zip** and **Codex Usage Bar.app** names. Future approved releases will use **Watch-the-Limits-macOS.zip** and **Watch the Limits.app**.
 
 Requires **macOS 13 Ventura or newer**. Release builds include both Apple Silicon and Intel support. You also need a local Codex installation signed in with your ChatGPT account.
 
@@ -32,7 +36,7 @@ Early releases are ad-hoc signed, without Apple notarization. macOS may block a 
    codex login
    ```
 
-3. Open Codex Usage Bar. Its icon appears in the menu bar.
+3. Open Watch the Limits. Its icon appears in the menu bar.
 
 The app looks in your environment's PATH, standard Homebrew locations, and known desktop-app locations. If it cannot find Codex, click **Locate Codex**, or **Settings → Codex location → Choose**, and select the `codex` executable. For version-managed Node installations, select the executable inside your active Node version's bin directory.
 
@@ -57,11 +61,11 @@ The integration uses the [documented Codex app-server protocol](https://learn.ch
 Install Xcode 26 or newer and finish its first-launch setup, then:
 
 ```sh
-git clone https://github.com/alisov66/codex-usage-bar.git
-cd codex-usage-bar
+git clone https://github.com/alisov66/watch-the-limits.git
+cd watch-the-limits
 swift test
 bash scripts/build.sh
-open "dist/Codex Usage Bar.app"
+open "dist/Watch the Limits.app"
 ```
 
 Build for both Apple Silicon and Intel:
@@ -79,20 +83,20 @@ On macOS 26 and later, the dropdown uses Apple's native Liquid Glass container i
 Preview the interface using sample data:
 
 ```sh
-swift run CodexUsageBar --demo
+swift run WatchTheLimits --demo
 ```
 
 On macOS 26 or newer, verify the actual panel with synthetic data (opening,
 queued-click handling, Settings resizing, Escape, outside-click dismissal, and reopening):
 
 ```sh
-"dist/Codex Usage Bar.app/Contents/MacOS/CodexUsageBar" --verify-panel
+"dist/Watch the Limits.app/Contents/MacOS/WatchTheLimits" --verify-panel
 ```
 
 Check the live connection without opening the interface:
 
 ```sh
-swift run CodexUsageBar --check
+swift run WatchTheLimits --check
 ```
 
 ## Contributing

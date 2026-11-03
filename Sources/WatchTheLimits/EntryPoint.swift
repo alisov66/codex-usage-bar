@@ -23,7 +23,7 @@ enum EntryPoint {
         }
         if let flag = CommandLine.arguments.firstIndex(of: "--render-panels") {
             guard CommandLine.arguments.indices.contains(flag + 1) else {
-                fputs("Usage: CodexUsageBar --render-panels OUTPUT_DIRECTORY\n", stderr)
+                fputs("Usage: WatchTheLimits --render-panels OUTPUT_DIRECTORY\n", stderr)
                 exit(1)
             }
             do {
@@ -36,7 +36,7 @@ enum EntryPoint {
         }
         if let flag = CommandLine.arguments.firstIndex(of: "--render-indicators") {
             guard CommandLine.arguments.indices.contains(flag + 1) else {
-                fputs("Usage: CodexUsageBar --render-indicators OUTPUT_DIRECTORY\n", stderr)
+                fputs("Usage: WatchTheLimits --render-indicators OUTPUT_DIRECTORY\n", stderr)
                 exit(1)
             }
             do {

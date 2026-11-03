@@ -92,7 +92,7 @@ public actor CodexClient {
             await self?.didClose(generation: currentGeneration)
         }
         _ = try await request("initialize", params: [
-            "clientInfo": ["name": "codex_usage_bar", "title": "Codex Usage Bar", "version": "0.1.0"]
+            "clientInfo": ["name": "watch_the_limits", "title": "Watch the Limits", "version": "0.1.0"]
         ])
         try send(["method": "initialized"])
     }

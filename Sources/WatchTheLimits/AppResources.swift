@@ -4,7 +4,7 @@ enum AppResources {
     /// SwiftPM's command-line accessor doesn't search a macOS app's Resources directory.
     static let bundle: Bundle = {
         for container in [Bundle.main.resourceURL, Bundle.main.bundleURL].compactMap({ $0 }) {
-            let url = container.appendingPathComponent("CodexUsageBar_CodexUsageBar.bundle")
+            let url = container.appendingPathComponent("WatchTheLimits_WatchTheLimits.bundle")
             if let bundle = Bundle(url: url) { return bundle }
         }
         return Bundle.module

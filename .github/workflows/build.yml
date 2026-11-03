@@ -35,15 +35,15 @@ jobs:
       - name: Build universal app
         run: bash scripts/build.sh universal
       - name: Verify bundled Figma resources and render all display modes
-        run: '"dist/Codex Usage Bar.app/Contents/MacOS/CodexUsageBar" --render-indicators dist/indicator-previews'
+        run: '"dist/Watch the Limits.app/Contents/MacOS/WatchTheLimits" --render-indicators dist/indicator-previews'
       - name: Verify panel colors, vector icons, and all panel states
-        run: '"dist/Codex Usage Bar.app/Contents/MacOS/CodexUsageBar" --render-panels dist/panel-previews'
+        run: '"dist/Watch the Limits.app/Contents/MacOS/WatchTheLimits" --render-panels dist/panel-previews'
       - name: Upload app
         uses: actions/upload-artifact@v4
         with:
-          name: Codex-Usage-Bar-macOS
+          name: Watch-the-Limits-macOS
           path: |
-            dist/Codex-Usage-Bar-macOS.zip
+            dist/Watch-the-Limits-macOS.zip
             dist/SHA256SUMS.txt
             dist/indicator-previews/
             dist/panel-previews/
@@ -53,13 +53,13 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: Codex-Usage-Bar-macOS
+          name: Watch-the-Limits-macOS
       - name: Verify live native panel presentation
         run: |
-          ditto -xk Codex-Usage-Bar-macOS.zip .
+          ditto -xk Watch-the-Limits-macOS.zip .
           python3 - <<'PY'
           import subprocess
-          subprocess.run(['Codex Usage Bar.app/Contents/MacOS/CodexUsageBar', '--verify-panel'],
+          subprocess.run(['Watch the Limits.app/Contents/MacOS/WatchTheLimits', '--verify-panel'],
                          check=True, timeout=30)
           PY
   release:
@@ -72,7 +72,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: Codex-Usage-Bar-macOS
+          name: Watch-the-Limits-macOS
           path: dist
       - name: Publish release
         env:
@@ -80,4 +80,4 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          gh release create "$RELEASE_TAG" dist/Codex-Usage-Bar-macOS.zip dist/SHA256SUMS.txt --title "Codex Usage Bar $RELEASE_TAG" --notes-file "docs/releases/$RELEASE_TAG.md"
+          gh release create "$RELEASE_TAG" dist/Watch-the-Limits-macOS.zip dist/SHA256SUMS.txt --title "Watch the Limits $RELEASE_TAG" --notes-file "docs/releases/$RELEASE_TAG.md"

@@ -2,10 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleExecutable</key><string>CodexUsageBar</string>
+    <key>CFBundleExecutable</key><string>WatchTheLimits</string>
     <key>CFBundleIdentifier</key><string>com.alisov.codex-usage-bar</string>
-    <key>CFBundleName</key><string>Codex Usage Bar</string>
-    <key>CFBundleDisplayName</key><string>Codex Usage Bar</string>
+    <key>CFBundleName</key><string>Watch the Limits</string>
+    <key>CFBundleDisplayName</key><string>Watch the Limits</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleIconFile</key><string>CodexAppIcon</string>
     <key>CFBundleIconName</key><string>CodexAppIcon</string>
