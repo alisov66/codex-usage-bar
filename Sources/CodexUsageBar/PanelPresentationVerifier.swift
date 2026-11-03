@@ -42,7 +42,7 @@ enum PanelPresentationVerifier {
         let collapsed = panel.frame
         model.showSettings = true
         try await Task.sleep(nanoseconds: 300_000_000)
-        print("Expanded panel: \(panel.frame), visible: \(panel.isVisible)")
+        print("Expanded panel: \(panel.frame), visible: \(panel.isVisible), active: \(NSApp.isActive)")
         guard panel.isVisible, panel.frame.width == collapsed.width,
               panel.frame.height > collapsed.height, abs(panel.frame.maxY - collapsed.maxY) < 1 else {
             throw failure("Panel did not expand while keeping its top edge anchored.")
@@ -54,8 +54,10 @@ enum PanelPresentationVerifier {
         try verifyRoundedShell(panel)
         panel.cancelOperation(nil)
         guard !panel.isVisible else { throw failure("Escape did not dismiss the panel.") }
+        NSApp.activate(ignoringOtherApps: true)
         panel.show(relativeTo: button)
         try await Task.sleep(nanoseconds: 200_000_000)
+        print("Reopened panel: \(panel.frame), visible: \(panel.isVisible), active: \(NSApp.isActive)")
         guard panel.isVisible, panel.frame.size == collapsed.size else { throw failure("Panel did not reopen.") }
         let outsideClick = NSEvent.mouseEvent(with: .leftMouseDown, location: .zero,
                                              modifierFlags: [], timestamp: ProcessInfo.processInfo.systemUptime,
