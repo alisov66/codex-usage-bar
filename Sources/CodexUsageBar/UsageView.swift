@@ -233,6 +233,7 @@ private struct UsageLimitView: View {
 private struct SettingsDisclosure: View {
     @Binding var expanded: Bool
     @StateObject private var hover = PanelHoverState()
+    @Environment(\.panelPreviewHover) private var previewHover
     private let layout = PanelDesign.shared.layout
 
     var body: some View {
@@ -250,7 +251,7 @@ private struct SettingsDisclosure: View {
             .padding(.horizontal, layout.disclosurePadding)
             .frame(height: layout.controlHeight)
             .contentShape(Capsule())
-            .background(hover.isHovered ? PanelDesign.color("control/fill") : .clear, in: Capsule())
+            .background(previewHover || hover.isHovered ? PanelDesign.color("control/fill-hover") : .clear, in: Capsule())
         }
         .buttonStyle(.plain)
         .onHover { hover.isHovered = $0 }
@@ -273,10 +274,8 @@ private struct MenuBarSelector: View {
                         .foregroundStyle(PanelDesign.color(selection == option ? "foreground-on-fill" : "control/foreground"))
                         .padding(.horizontal, layout.controlPadding)
                         .frame(height: layout.controlHeight)
-                        .background(selection == option ? PanelDesign.color("control/fill-selected") : .clear,
-                                    in: RoundedRectangle(cornerRadius: layout.controlRadius))
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(PanelSelectorButtonStyle(selected: selection == option))
                 .accessibilityLabel(option.title)
                 .accessibilityAddTraits(selection == option ? .isSelected : [])
             }

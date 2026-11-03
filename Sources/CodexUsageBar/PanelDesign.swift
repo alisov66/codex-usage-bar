@@ -96,6 +96,7 @@ struct PanelButtonStyle: ButtonStyle {
     private struct Chrome: View {
         let configuration: ButtonStyle.Configuration
         @Environment(\.isEnabled) private var enabled
+        @Environment(\.panelPreviewHover) private var previewHover
         @StateObject private var hover = PanelHoverState()
         private let layout = PanelDesign.shared.layout
 
@@ -105,7 +106,7 @@ struct PanelButtonStyle: ButtonStyle {
                 .foregroundStyle(PanelDesign.color(enabled ? "control/foreground" : "control/foreground-disabled"))
                 .padding(.horizontal, layout.controlPadding)
                 .frame(height: layout.controlHeight)
-                .background(PanelDesign.color(enabled && (hover.isHovered || configuration.isPressed) ? "control/fill-hover" : "control/fill"),
+                .background(PanelDesign.color(enabled && (previewHover || hover.isHovered || configuration.isPressed) ? "control/fill-hover" : "control/fill"),
                             in: RoundedRectangle(cornerRadius: layout.controlRadius))
                 .contentShape(RoundedRectangle(cornerRadius: layout.controlRadius))
                 .onHover { hover.isHovered = $0 }
@@ -115,4 +116,43 @@ struct PanelButtonStyle: ButtonStyle {
 
 final class PanelHoverState: ObservableObject {
     @Published var isHovered = false
+}
+
+struct PanelSelectorButtonStyle: ButtonStyle {
+    let selected: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        Chrome(configuration: configuration, selected: selected)
+    }
+
+    private struct Chrome: View {
+        let configuration: ButtonStyle.Configuration
+        let selected: Bool
+        @StateObject private var hover = PanelHoverState()
+        @Environment(\.panelPreviewHover) private var previewHover
+
+        var body: some View {
+            configuration.label
+                .background(fill, in: RoundedRectangle(cornerRadius: PanelDesign.shared.layout.controlRadius))
+                .contentShape(RoundedRectangle(cornerRadius: PanelDesign.shared.layout.controlRadius))
+                .onHover { hover.isHovered = $0 }
+        }
+
+        private var fill: Color {
+            if selected { return PanelDesign.color("control/fill-selected") }
+            return previewHover || hover.isHovered || configuration.isPressed ? PanelDesign.color("control/fill") : .clear
+        }
+    }
+}
+
+/// Deterministic hover renders for design review; real interaction uses onHover.
+private struct PanelPreviewHoverKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
+extension EnvironmentValues {
+    var panelPreviewHover: Bool {
+        get { self[PanelPreviewHoverKey.self] }
+        set { self[PanelPreviewHoverKey.self] = newValue }
+    }
 }

@@ -113,16 +113,16 @@
         "a": 1
       },
       "panel/control/fill-hover": {
-        "r": 1,
-        "g": 1,
-        "b": 1,
-        "a": 0.7
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.1
       },
       "panel/control/fill": {
-        "r": 1,
-        "g": 1,
-        "b": 1,
-        "a": 0.25
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.06
       },
       "panel/control/foreground": {
         "r": 0,
@@ -161,10 +161,10 @@
         "a": 0.25
       },
       "panel/progress/track": {
-        "r": 1,
-        "g": 1,
-        "b": 1,
-        "a": 0.25
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.06
       },
       "panel/progress/fill": {
         "r": 0,
@@ -179,10 +179,10 @@
         "a": 0.25
       },
       "panel/selector/fill": {
-        "r": 1,
-        "g": 1,
-        "b": 1,
-        "a": 0.25
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.06
       }
     },
     "Dark": {
@@ -229,16 +229,16 @@
         "a": 1
       },
       "panel/control/fill-hover": {
-        "r": 0,
-        "g": 0,
-        "b": 0,
-        "a": 0.7
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.15
       },
       "panel/control/fill": {
         "r": 1,
         "g": 1,
         "b": 1,
-        "a": 0.25
+        "a": 0.12
       },
       "panel/control/foreground": {
         "r": 1,
@@ -280,7 +280,7 @@
         "r": 1,
         "g": 1,
         "b": 1,
-        "a": 0.25
+        "a": 0.12
       },
       "panel/progress/fill": {
         "r": 1,
@@ -298,7 +298,7 @@
         "r": 1,
         "g": 1,
         "b": 1,
-        "a": 0.25
+        "a": 0.12
       }
     }
   }

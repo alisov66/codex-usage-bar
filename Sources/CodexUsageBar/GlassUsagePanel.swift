@@ -42,6 +42,8 @@ final class GlassUsagePanel: NSPanel {
         anchor = button
         resizeToContent()
         makeKeyAndOrderFront(nil)
+        displayIfNeeded()
+        invalidateShadow()
         // The remote menu-bar host can finish assigning its screen after ordering.
         DispatchQueue.main.async { [weak self] in self?.resizeToContent() }
         startDismissalMonitoring()
@@ -63,6 +65,8 @@ final class GlassUsagePanel: NSPanel {
         let top = (hasPosition ? min(target.minY, available.maxY) : available.maxY) - 4
         setFrame(NSRect(x: left, y: max(available.minY, top - size.height),
                         width: size.width, height: size.height), display: true)
+        contentView?.layoutSubtreeIfNeeded()
+        invalidateShadow()
     }
 
     private func startDismissalMonitoring() {
@@ -105,29 +109,72 @@ final class GlassUsagePanel: NSPanel {
 
 @MainActor
 enum PanelShell {
+    static let cornerRadius: CGFloat = 20
+
     static func make(content: NSView) -> NSView {
         let shell: NSView
+        let container: NSView
         if #available(macOS 26.0, *) {
             let glass = NSGlassEffectView()
             glass.style = .regular
-            glass.cornerRadius = 20
+            glass.cornerRadius = cornerRadius
             glass.contentView = content
-            shell = glass
+            container = glass
+            shell = RoundedGlassShell(glass: glass)
         } else {
             let material = NSVisualEffectView()
             material.material = .popover
             material.blendingMode = .behindWindow
             material.state = .active
             material.addSubview(content)
+            container = material
             shell = material
         }
         content.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            content.leadingAnchor.constraint(equalTo: shell.leadingAnchor),
-            content.trailingAnchor.constraint(equalTo: shell.trailingAnchor),
-            content.topAnchor.constraint(equalTo: shell.topAnchor),
-            content.bottomAnchor.constraint(equalTo: shell.bottomAnchor)
+            content.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            content.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            content.topAnchor.constraint(equalTo: container.topAnchor),
+            content.bottomAnchor.constraint(equalTo: container.bottomAnchor)
         ])
         return shell
+    }
+}
+
+/// The window's alpha silhouette must match the glass, not its rectangular bounds.
+/// Glass rounds its material separately; this root clips all backing content and
+/// lets AppKit recalculate the native window shadow from the rounded silhouette.
+@available(macOS 26.0, *)
+@MainActor
+final class RoundedGlassShell: NSView {
+    private var shadowSize = NSSize.zero
+
+    override var isOpaque: Bool { false }
+
+    init(glass: NSGlassEffectView) {
+        super.init(frame: .zero)
+        wantsLayer = true
+        layer?.backgroundColor = NSColor.clear.cgColor
+        layer?.cornerRadius = PanelShell.cornerRadius
+        layer?.cornerCurve = .continuous
+        layer?.masksToBounds = true
+        addSubview(glass)
+        glass.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            glass.leadingAnchor.constraint(equalTo: leadingAnchor),
+            glass.trailingAnchor.constraint(equalTo: trailingAnchor),
+            glass.topAnchor.constraint(equalTo: topAnchor),
+            glass.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) is not supported") }
+
+    override func layout() {
+        super.layout()
+        if bounds.size != shadowSize {
+            shadowSize = bounds.size
+            window?.invalidateShadow()
+        }
     }
 }
