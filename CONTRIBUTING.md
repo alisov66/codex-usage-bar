@@ -11,7 +11,14 @@ bash scripts/build.sh
 
 ## Design and release workflow
 
-UI work starts with the owner's design, a review of the Figma link, and a discussion of any implementation constraints. Implementation begins after explicit approval of the agreed design and scope.
+For every new design or design update:
+
+1. Inspect the supplied design read-only.
+2. Share observations and suggestions, and ask any questions about the design or implementation constraints.
+3. Discuss the findings and resolve open questions until the scope is agreed.
+4. Summarize the agreed scope, ask the owner whether implementation may begin, and wait for explicit approval.
+
+Sending a design update starts this review process. UI code and Figma edits begin only after implementation approval.
 
 Small improvements can accumulate in development. Public GitHub releases require separate approval of a meaningful batch of changes, its proposed version, release notes, and validation results. Implementation approval does not authorize publishing a release.
 
